@@ -58,6 +58,13 @@
   margin-top: 5%;
 }
 
+.nonePL {
+  display: none;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 5%;
+}
+
 .loss {
   display: none;
   font-size: 1.4rem;

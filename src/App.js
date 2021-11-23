@@ -14,12 +14,20 @@ export default function App() {
     document.querySelector(".box").style.backgroundColor = "white";
     document.querySelector(".profit").style.display = "none";
     document.querySelector(".loss").style.display = "none";
+    document.querySelector(".nonePL").style.display = "none";
     var purchasePrice = document.querySelector("#purchase-price").value;
     var purchaseQuan = document.querySelector("#purchase-quantity").value;
     var currentPrice = document.querySelector("#current-price").value;
 
     if (purchasePrice !== "" && purchaseQuan !== "" && currentPrice !== "") {
-      if (purchasePrice != 0 && purchaseQuan != 0 && currentPrice != 0) {
+      if (
+        purchasePrice !== 0 &&
+        purchaseQuan !== 0 &&
+        currentPrice !== 0 &&
+        purchasePrice > 0 &&
+        purchaseQuan > 0 &&
+        currentPrice > 0
+      ) {
         document.querySelector("#loading-image").style.display = "block";
         setShowLoadingAnim(loadingGif);
         setTimeout(() => {
@@ -28,22 +36,23 @@ export default function App() {
           totalCurrentPrice = currentPrice * purchaseQuan;
 
           if (totalCurrentPrice > totalPurchasePrice) {
-            var difference = totalCurrentPrice - totalPurchasePrice;
+            var totalProfit = (currentPrice - purchasePrice) * purchaseQuan;
             let profitLossPercentage = (
-              (difference / purchasePrice) *
+              (totalProfit / purchasePrice) *
               100
             ).toFixed(2);
-            let totalProfit = difference * purchaseQuan;
             setPercentage(profitLossPercentage);
             setRupees(totalProfit);
             document.querySelector(".box").style.backgroundColor = "#79ea86";
             document.querySelector(".profit").style.display = "block";
+          } else if (totalCurrentPrice === totalPurchasePrice) {
+            document.querySelector(".nonePL").style.display = "block";
           } else {
-            var difference = totalCurrentPrice - totalPurchasePrice;
-            let profitLossPercentage = Math.abs(
-              ((difference / purchasePrice) * 100).toFixed(2)
-            );
-            let totalLoss = Math.abs(difference * purchaseQuan);
+            var totalLoss = (purchasePrice - currentPrice) * purchaseQuan;
+            let profitLossPercentage = (
+              (totalLoss / purchasePrice) *
+              100
+            ).toFixed(2);
             setPercentage(profitLossPercentage);
             setRupees(totalLoss);
             if (profitLossPercentage > 50) {
@@ -92,6 +101,9 @@ export default function App() {
           <div className="profit">
             <p>🎉 You Gained {percentage}% </p>
             <p>👍 Total Profit of Rs. {rupees}</p>
+          </div>
+          <div className="nonePL">
+            <p>🎉 No Pain No Gain! </p>
           </div>
           <div className="loss">
             <p>😞 You Lost {percentage}% </p>
